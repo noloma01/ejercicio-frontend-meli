@@ -66,7 +66,7 @@ function obtenerListaItems(resultados, cantidad) {
 
     for (let i = 0; i < cantidad; i++) {
         let item = armarItem(resultados[i]);
-        item.state = address.state_name;
+        item.state = resultados[i].address.state_name;
         items.push(item);
         if (items.length === cantidad) {
             break;
@@ -83,7 +83,6 @@ function obtenerItem(resultado) {
 }
 
 function armarItem(resultado) {
-    console.log("shipping -> ", resultado);
     return {
         id: resultado.id,
         title: resultado.title,
