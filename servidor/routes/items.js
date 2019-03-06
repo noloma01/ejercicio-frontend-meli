@@ -2,9 +2,10 @@ var express = require('express');
 var router = express.Router();
 
 var request = require('request');
+var rp = require('request-promise');
 
 /* GET lista items. */
-router.get('/', function (req, res, next) {
+router.get('/', function (req, res) {
     let parametro = req.query.q;
 
     if (!parametro || parametro === '') {
@@ -23,12 +24,31 @@ router.get('/', function (req, res, next) {
             let responseBody = {
                 author: {name: res.app.locals.authorName, lastname: res.app.locals.authorLastName},
                 categories: obtenerCategorias(result.filters, "category"),
-                items: obtenerItems(result.results, req.query.cantidad || res.app.locals.cantidadItems)
+                items: obtenerListaItems(result.results, req.query.cantidad || res.app.locals.cantidadItems)
             };
 
             res.send(responseBody)
         });
     }
+});
+
+/* GET item por id. */
+router.get('/:id', function (req, res) {
+
+    let url = req.app.locals.apiUrl + 'items/' + req.params.id;
+
+    rp(url).then(result => {
+        rp(url + "/description").then(description => {
+            let item = obtenerItem(JSON.parse(result));
+            item.description = JSON.parse(description).plain_text;
+            let responseBody = {
+                author: {name: res.app.locals.authorName, lastname: res.app.locals.authorLastName},
+                item: item
+            };
+            res.set('Content-Type', 'application/json');
+            res.send(responseBody);
+        })
+    });
 });
 
 function obtenerCategorias(filtros, idFiltro) {
@@ -41,29 +61,41 @@ function obtenerCategorias(filtros, idFiltro) {
     return resultado;
 }
 
-function obtenerItems(resultados, cantidad) {
-
+function obtenerListaItems(resultados, cantidad) {
     let items = [];
 
     for (let i = 0; i < cantidad; i++) {
-        let objeto = {
-            id: resultados[i].id,
-            title: resultados[i].title,
-            price: {
-                currency: resultados[i].currency_id,
-                amount: resultados[i].price,
-                decimals: 2
-            },
-            picture: resultados[i].thumbnail,
-            condition: resultados[i].condition,
-            free_shipping: resultados[i].shipping.free_shipping
-        };
-        items.push(objeto);
+        let item = armarItem(resultados[i]);
+        item.state = address.state_name;
+        items.push(item);
         if (items.length === cantidad) {
             break;
         }
     }
     return items;
+}
+
+function obtenerItem(resultado) {
+    let item = armarItem(resultado);
+    item.sold_quantity = resultado.sold_quantity;
+
+    return item;
+}
+
+function armarItem(resultado) {
+    console.log("shipping -> ", resultado);
+    return {
+        id: resultado.id,
+        title: resultado.title,
+        price: {
+            currency: resultado.currency_id,
+            amount: resultado.price,
+            decimals: 2
+        },
+        picture: resultado.thumbnail,
+        condition: resultado.condition,
+        free_shipping: resultado.shipping.free_shipping
+    };
 }
 
 module.exports = router;
