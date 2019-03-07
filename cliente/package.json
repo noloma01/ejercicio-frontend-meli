@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "client": "ng serve --open"
+    "client": "ng serve --live-reload --open"
   },
   "private": true,
   "dependencies": {

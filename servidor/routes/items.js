@@ -13,22 +13,27 @@ router.get('/', function (req, res) {
         res.send("El parámetro de búsqueda es requerido.");
     }
     else {
-        let url = req.app.locals.apiUrl + 'sites/MLA/search?q=' + parametro;
+        try {
+            let url = req.app.locals.apiUrl + 'sites/MLA/search?q=' + parametro;
 
-        request(url, function (error, response, body) {
-            res.set('Content-Type', 'application/json');
-            console.log("URL " + url);
+            request(url, function (error, response, body) {
+                res.set('Content-Type', 'application/json');
+                console.log("URL " + url);
 
-            const result = JSON.parse(body);
+                const result = JSON.parse(body);
 
-            let responseBody = {
-                author: {name: res.app.locals.authorName, lastname: res.app.locals.authorLastName},
-                categories: obtenerCategorias(result.filters, "category"),
-                items: obtenerListaItems(result.results, req.query.cantidad || res.app.locals.cantidadItems)
-            };
+                let responseBody = [{
+                    author: {name: res.app.locals.authorName, lastname: res.app.locals.authorLastName},
+                    categories: obtenerCategorias(result.filters, "category"),
+                    items: obtenerListaItems(result.results, req.query.cantidad || res.app.locals.cantidadItems)
+                }];
 
-            res.send(responseBody)
-        });
+                res.send(responseBody)
+            });
+        }
+        catch (e) {
+            res.send("Se produjo un error: " + e);
+        }
     }
 });
 
@@ -41,10 +46,10 @@ router.get('/:id', function (req, res) {
         rp(url + "/description").then(description => {
             let item = obtenerItem(JSON.parse(result));
             item.description = JSON.parse(description).plain_text;
-            let responseBody = {
+            let responseBody = [{
                 author: {name: res.app.locals.authorName, lastname: res.app.locals.authorLastName},
                 item: item
-            };
+            }];
             res.set('Content-Type', 'application/json');
             res.send(responseBody);
         })
@@ -54,9 +59,11 @@ router.get('/:id', function (req, res) {
 function obtenerCategorias(filtros, idFiltro) {
     let resultado = [];
     let categorias = filtros.find(x => x.id === idFiltro);
-    categorias.values[0].path_from_root.forEach(x => {
-        resultado.push(x.name);
-    });
+    if (categorias) {
+        categorias.values[0].path_from_root.forEach(x => {
+            resultado.push(x.name);
+        });
+    }
 
     return resultado;
 }
