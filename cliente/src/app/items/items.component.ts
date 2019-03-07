@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ItemsService} from "./shared/items.service";
-import {Resultado} from "./shared/models/resultado.model";
+import {Resultados} from "./shared/models/resultados.model";
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
@@ -11,7 +11,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 
 export class ItemsComponent implements OnInit {
 
-  public resultado: Resultado = new Resultado();
+  public resultado: Resultados = new Resultados();
   public filtro: string;
 
   constructor(private itemsService: ItemsService,
@@ -35,6 +35,7 @@ export class ItemsComponent implements OnInit {
   }
 
   buscarItemPorId(id: string) {
+    this.itemsService.setBreadcrumb(this.getCategories());
     this.router.navigate([/items/ + id])
   }
 

@@ -3,6 +3,11 @@ import {Item} from "./item.model";
 
 export class Resultado {
   public author: Author;
-  public categories: string[];
-  public items: Item[];
+  public item: Item;
+
+
+  constructor(author?: Author, item?: Item) {
+    this.author = author;
+    this.item = item;
+  }
 }

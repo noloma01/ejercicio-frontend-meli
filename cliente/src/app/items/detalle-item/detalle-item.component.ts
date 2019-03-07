@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {switchMap} from "rxjs/internal/operators";
-import {ActivatedRoute, Params, Route} from "@angular/router";
+import {ActivatedRoute, Params} from "@angular/router";
 import {ItemsService} from "../shared/items.service";
 import {Resultado} from "../shared/models/resultado.model";
 
@@ -12,12 +11,14 @@ import {Resultado} from "../shared/models/resultado.model";
 export class DetalleItemComponent implements OnInit {
 
   public resultado: Resultado = new Resultado();
+  public breadCrumb: string;
 
   constructor(private itemsService: ItemsService,
               private route: ActivatedRoute) {
   }
 
   ngOnInit() {
+    this.breadCrumb = this.itemsService.getBreadcrumb();
     this.getItem()
   }
 
@@ -26,7 +27,6 @@ export class DetalleItemComponent implements OnInit {
       this.itemsService.getItemById(param['id'])
         .subscribe(resultado => {
           this.resultado = resultado;
-          console.error(this.resultado)
         });
     });
   }

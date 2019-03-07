@@ -3,14 +3,14 @@
     {{getCategories()}}
   </div>
   <div class="card-pane">
-    <div class="col-12" *ngFor="let item of resultado.items" style="border-bottom: 1px solid #EEEEEE">
+    <div class="col-12" *ngFor="let item of resultado.items">
       <div class="row row-button" (click)="buscarItemPorId(item.id)">
         <div class="col-3" style="padding-top: 16px; padding-bottom: 16px; padding-left: 16px">
           <img [src]="item.picture" [alt]="item.title" width="180px" height="180px" style="border-radius: 4px">
         </div>
         <div class="col-6">
           <div class="row" style="font-size: 24px; padding-top: 5%">
-            {{"$ " + (item.price.amount | number:'1.0-2') }}
+            {{"$ " + (item.price.amount | thousands)}}
             <span *ngIf="item.free_shipping">
             <img style="padding-left: 10px" src="../../assets/ic_shipping.png" alt="Free Shipping">
           </span>

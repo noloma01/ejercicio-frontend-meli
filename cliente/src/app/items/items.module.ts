@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import {ItemsService} from "./shared/items.service";
 import {ItemsComponent} from "./items.component";
 import {DetalleItemComponent} from "./detalle-item/detalle-item.component";
+import {ThousandsPipe} from "../thousands.pipe";
 
 @NgModule({
   declarations: [
     ItemsComponent,
-    DetalleItemComponent
+    DetalleItemComponent,
+    ThousandsPipe
   ],
   imports: [
     CommonModule

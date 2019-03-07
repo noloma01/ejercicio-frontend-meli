@@ -1,5 +1,6 @@
 .row-button {
   cursor: pointer;
+  border-bottom: 1px solid #EEEEEE;
 }
 
 .row-button:hover {
@@ -16,7 +17,7 @@
   cursor: pointer;
 }
 
-.row-breadcrumb:active{
+.row-breadcrumb:active {
   font-style: italic;
   font-size: 18px;
 }
