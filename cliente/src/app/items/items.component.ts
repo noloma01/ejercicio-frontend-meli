@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ItemsService} from "./shared/items.service";
 import {Resultado} from "./shared/models/resultado.model";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-items',
@@ -15,7 +15,8 @@ export class ItemsComponent implements OnInit {
   public filtro: string;
 
   constructor(private itemsService: ItemsService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -31,5 +32,24 @@ export class ItemsComponent implements OnInit {
             this.resultado = resultado;
           })
       });
+  }
+
+  buscarItemPorId(id: string) {
+    this.router.navigate([/items/ + id])
+  }
+
+  getCategories(): string {
+    let result = '';
+    if (this.resultado.categories) {
+      this.resultado.categories.forEach((categoria, index) => {
+        if (index == this.resultado.categories.length - 1) {
+          result += categoria;
+        }
+        else {
+          result += categoria + " > ";
+        }
+      })
+    }
+    return result;
   }
 }
