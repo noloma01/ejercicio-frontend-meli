@@ -1,60 +1,69 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var request = require('request');
-var rp = require('request-promise');
+const request = require('request');
+const rp = require('request-promise');
 
 /* GET lista items. */
-router.get('/', function (req, res) {
-    let parametro = req.query.q;
-
-    if (!parametro || parametro === '') {
-        res.set('Content-Type', 'application/json');
-        res.send("El parámetro de búsqueda es requerido.");
-    }
-    else {
-        try {
-            let url = req.app.locals.apiUrl + 'sites/MLA/search?q=' + parametro;
-
-            request(url, function (error, response, body) {
-                res.set('Content-Type', 'application/json');
-                console.log("URL " + url);
-
-                const result = JSON.parse(body);
-
-                let responseBody = [{
-                    author: {name: res.app.locals.authorName, lastname: res.app.locals.authorLastName},
-                    categories: obtenerCategorias(result.filters, "category"),
-                    items: obtenerListaItems(result.results, req.query.cantidad || res.app.locals.cantidadItems)
-                }];
-
-                res.send(responseBody)
-            });
-        }
-        catch (e) {
-            res.send("Se produjo un error: " + e);
-        }
-    }
-});
+router.get('/', validarParametro, obtenerListaRespuestas);
 
 /* GET item por id. */
-router.get('/:id', function (req, res) {
+router.get('/:id', obtenerItemRespuesta);
 
-    let url = req.app.locals.apiUrl + 'items/' + req.params.id;
 
-    rp(url).then(result => {
-        rp(url + "/description").then(description => {
-            let item = obtenerItem(JSON.parse(result));
-            item.description = JSON.parse(description).plain_text;
+function validarParametro(req, res, next) {
+    if (!req.query.q || req.query.q === '') {
+        res.json("El parámetro de búsqueda es requerido.");
+    }
+    else {
+        next();
+    }
+}
+
+function obtenerListaRespuestas(req, res) {
+    try {
+        let parametro = req.query.q;
+        let url = `${req.app.locals.apiUrl}sites/MLA/search?q=${parametro}`;
+
+        request(url, function (error, response, body) {
+
+            const result = JSON.parse(body);
+
             let responseBody = [{
                 author: {name: res.app.locals.authorName, lastname: res.app.locals.authorLastName},
-                item: item
+                categories: obtenerCategorias(result.filters, "category"),
+                items: obtenerListaItems(result.results, req.query.cantidad || res.app.locals.cantidadItems)
             }];
-            res.set('Content-Type', 'application/json');
-            res.send(responseBody);
-        })
-    });
-});
+
+            res.json(responseBody, 200)
+        });
+    }
+    catch (e) {
+        res.json("Se produjo un error: " + e, 500);
+    }
+}
+
+function obtenerItemRespuesta(req, res) {
+
+    try {
+        let url = req.app.locals.apiUrl + 'items/' + req.params.id;
+
+        rp(url).then(result => {
+            rp(url + "/description").then(description => {
+                let item = obtenerItem(JSON.parse(result));
+                item.description = JSON.parse(description).plain_text;
+                let responseBody = [{
+                    author: {name: res.app.locals.authorName, lastname: res.app.locals.authorLastName},
+                    item: item
+                }];
+                res.json(responseBody, 200);
+            })
+        });
+    }
+    catch (e) {
+        res.json("Se produjo un error: " + e, 500);
+    }
+}
 
 function obtenerCategorias(filtros, idFiltro) {
     let resultado = [];
@@ -69,17 +78,13 @@ function obtenerCategorias(filtros, idFiltro) {
 }
 
 function obtenerListaItems(resultados, cantidad) {
-    let items = [];
+    resultados = resultados.slice(0, cantidad);
 
-    for (let i = 0; i < cantidad; i++) {
-        let item = armarItem(resultados[i]);
-        item.state = resultados[i].address.state_name;
-        items.push(item);
-        if (items.length === cantidad) {
-            break;
-        }
-    }
-    return items;
+    return resultados.map(x => {
+        let item = armarItem(x);
+        item.state = x.address.state_name;
+        return item;
+    });
 }
 
 function obtenerItem(resultado) {

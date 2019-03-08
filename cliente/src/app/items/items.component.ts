@@ -41,6 +41,7 @@ export class ItemsComponent implements OnInit {
 
   getCategories(): string {
     let result = '';
+    console.error(this.resultado.categories);
     if (this.resultado.categories) {
       this.resultado.categories.forEach((categoria, index) => {
         if (index == this.resultado.categories.length - 1) {

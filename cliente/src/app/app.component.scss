@@ -1,6 +1,5 @@
 @import "../styles/styles";
 
-$medium-gray: #e0e0e0;
 html {
   position: relative;
   height: 100%;
@@ -10,17 +9,7 @@ html {
 body {
   margin-bottom: 90px;
   min-height: 100%;
-  background-color: #EEEEEE;
-}
-
-.navbar {
-  background-color: #FFE600;
-}
-
-.search-box {
-  padding-top: 0.5%;
-  padding-left: 10%;
-  padding-right: 10%;
+  background-color: $body-color;
 }
 
 .footer {
@@ -34,6 +23,16 @@ body {
   width: 100%;
   height: 90px;
   background-color: #333333;
+}
+
+.navbar {
+  background-color: $navbar-color;
+}
+
+.search-box {
+  padding-top: 0.5%;
+  padding-left: 10%;
+  padding-right: 10%;
 }
 
 

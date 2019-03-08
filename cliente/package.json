@@ -2,13 +2,8 @@
   "name": "cliente",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e",
-    "client": "ng serve --live-reload --open"
+    "devclient": "ng serve --live-reload --open",
+    "prodclient": "ng build"
   },
   "private": true,
   "dependencies": {
