@@ -1,0 +1,40 @@
+<div style="padding-bottom: 5px">
+  <div class="row row-breadcrumb">
+    {{breadCrumb}}
+  </div>
+  <div class="card-pane" *ngIf="resultado.item">
+    <div class="row" style="padding-bottom: 50px">
+      <div class="col-6">
+        <img [src]="resultado.item.picture" [alt]="resultado.item.title" width="380px" height="380px"
+             style="border-radius: 4px">
+      </div>
+      <div class="col-6" style="padding-top: 32px">
+        <div class="row" style="padding-bottom: 16px; font-size: 14px">
+          {{(resultado.item.condition == "new" ? "Nuevo" : "Usado") + " - "
+          + resultado.item.sold_quantity + " vendidos"}}
+        </div>
+        <div class="row" id="title-row">
+          {{resultado.item.title}}
+        </div>
+        <div class="row" id="price-row">
+          {{"$ " + (resultado.item.price.amount | thousands)}}
+        </div>
+        <div class="row" style="padding-right: 32px">
+          <button class="btn" id="buy-button">
+            Comprar
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="padding-left: 32px">
+      <div class="col-8">
+        <div class="row" id="description-row">
+          Descripción del producto
+        </div>
+        <div class="row" style="padding-bottom: 32px; font-size: 16px">
+          {{resultado.item.description}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

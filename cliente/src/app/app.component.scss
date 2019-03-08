@@ -1,0 +1,39 @@
+@import "../styles/styles";
+
+$medium-gray: #e0e0e0;
+html {
+  position: relative;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  margin-bottom: 90px;
+  min-height: 100%;
+  background-color: #EEEEEE;
+}
+
+.navbar {
+  background-color: #FFE600;
+}
+
+.search-box {
+  padding-top: 0.5%;
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
+.footer {
+  position: absolute;
+  padding-top: 5px;
+  bottom: 0;
+  color: white;
+  font-size: 15px;
+  text-align: right;
+  border-radius: 0;
+  width: 100%;
+  height: 90px;
+  background-color: #333333;
+}
+
+
