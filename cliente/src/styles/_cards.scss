@@ -1,5 +1,5 @@
 .card-pane {
-  background-color: #fff;
+  background-color: $white;
   margin-bottom: 20px;
   padding: 1.25rem;
   border-radius: 10px;
@@ -14,24 +14,3 @@
   @include title(18px, 700, capitalize, $darkgrey);
 }
 
-.editable {
-  position: absolute;
-  top: 25px;
-  right: 45px;
-  color: $darkblue;
-  font-size: 18px;
-}
-
-.collapse.show,
-.collapsing {
-  width: 100%;
-  padding-right: 15px;
-}
-
-.modal .card-title {
-  text-transform: unset;
-}
-
-.modal-content {
-  border-radius: 10px;
-}

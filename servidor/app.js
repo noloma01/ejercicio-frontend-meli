@@ -1,25 +1,30 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var cors = require('cors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const cors = require('cors');
 
-var itemsRouter = require('./routes/items');
+const itemsRouter = require('./routes/items');
 
-var app = express();
+let app = express();
+
+let environment = process.env.NODE_ENV;
 
 app.locals.apiUrl = "https://api.mercadolibre.com/";
 app.locals.authorName = "Manolo";
 app.locals.authorLastName = "Fernandez";
 app.locals.cantidadItems = 4;
 
-app.listen(3000);
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(cors());
-app.use(express.static(path.join(__dirname, 'public')));
+
+if (environment === 'develop') {
+    app.use(cors());
+}
+app.use(express.static(path.join(__dirname, '../', '/cliente', '/dist', '/cliente')));
+app.listen(3000);
 
 app.use('/api/items', itemsRouter);
 

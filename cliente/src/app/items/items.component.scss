@@ -1,6 +1,8 @@
+@import "../app.component";
+
 .row-button {
   cursor: pointer;
-  border-bottom: 1px solid #EEEEEE;
+  border-bottom: 1px solid $body-color;
 }
 
 .row-button:hover {
@@ -13,7 +15,7 @@
   height: fit-content;
   padding: 16px 5px 16px 15px;
   font-size: 14px;
-  color: #666666;
+  color: $breadcrumb-color;
   cursor: pointer;
 }
 

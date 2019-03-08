@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js",
-    "devserver": "SET DEBUG=servidor:* & nodemon app.js"
+    "prodserver": "cross-env NODE_ENV=production node app.js",
+    "devserver": "cross-env NODE_ENV=develop nodemon app.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
@@ -15,5 +15,8 @@
     "nodemon": "^1.18.10",
     "request": "^2.88.0",
     "request-promise": "^4.2.4"
+  },
+  "devDependencies": {
+    "cross-env": "^5.2.0"
   }
 }
